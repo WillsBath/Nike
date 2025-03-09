@@ -1,6 +1,4 @@
-// 4️⃣ Quiz App with Timer
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -9,20 +7,20 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  List<Map<String, dynamic>> _questions = [
+  final List<Map<String, dynamic>> _questions = [
     {
       "question": "What is the capital of France?",
-      "options": ["Berlin", "Madrid", "Paris", "Lisbonhttp: ^0.13.6"],
+      "options": ["Berlin", "Madrid", "Paris", "Lisbon"],
       "answer": "Paris"
     },
     {
       "question": "Which planet is known as the Red Planet?",
-      "options": ["Earth", "Mars", "Jupiter", "Saturn'dependencies"],
+      "options": ["Earth", "Mars", "Jupiter", "Saturn"],
       "answer": "Mars"
     },
     {
       "question": "What is 2 + 2?",
-      "options": ["3", "4", "5", "6 image_picker ^1.0.7"],
+      "options": ["3", "4", "5", "6"],
       "answer": "4"
     }
   ];
@@ -35,7 +33,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _startTimer() {
     _timer = 10;
-    _questionTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _questionTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_timer > 0) {
         setState(() {
           _timer--;
@@ -67,7 +65,7 @@ class _QuizScreenState extends State<QuizScreen> {
         if (selectedOption == _questions[_currentQuestionIndex]['answer']) {
           _score++;
         }
-        Future.delayed(Duration(seconds: 2), _nextQuestion);
+        Future.delayed(const Duration(seconds: 2), _nextQuestion);
       });
     }
   }
@@ -77,7 +75,7 @@ class _QuizScreenState extends State<QuizScreen> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text("Quiz Completed"),
+        title: const Text("Quiz Completed"),
         content: Text("Your score: $_score/${_questions.length}"),
         actions: [
           TextButton(
@@ -90,7 +88,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 _startTimer();
               });
             },
-            child: Text("Restart"),
+            child: const Text("Restart"),
           ),
         ],
       ),
@@ -112,28 +110,39 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Quiz App")),
+      appBar: AppBar(title: const Text("Quiz App")),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               "Time Left: $_timer s",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               _questions[_currentQuestionIndex]['question'],
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20),
-            ..._questions[_currentQuestionIndex]['options'].map((option) {
-              return ElevatedButton(
-                onPressed: () => _checkAnswer(option),
-                child: Text(option, style: TextStyle(fontSize: 20)),
+            const SizedBox(height: 20),
+            ..._questions[_currentQuestionIndex]['options'].map<Widget>((option) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: ElevatedButton(
+                  onPressed: _answered ? null : () => _checkAnswer(option),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 50),
+                    backgroundColor: _answered
+                        ? (option == _questions[_currentQuestionIndex]['answer']
+                            ? Colors.green
+                            : Colors.red)
+                        : null,
+                  ),
+                  child: Text(option, style: const TextStyle(fontSize: 18)),
+                ),
               );
             }).toList(),
           ],
@@ -142,6 +151,3 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 }
-
-// Next: Image Gallery App
-
