@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class AuthScreen extends StatefulWidget {
   @override
   _AuthScreenState createState() => _AuthScreenState();
@@ -6,9 +7,33 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool isLogin = true;
   bool _obscureText = true;
-  
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      String email = _emailController.text.trim();
+      String password = _passwordController.text.trim();
+
+      if (isLogin) {
+        // Perform login action
+        print("Logging in with $email and $password");
+      } else {
+        // Perform signup action
+        print("Signing up with $email and $password");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,12 +49,20 @@ class _AuthScreenState extends State<AuthScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      isLogin ? "Login" : "Signup", 
+                      isLogin ? "Login" : "Signup",
                       style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 20),
                     TextFormField(
-                      decoration: InputDecoration(hintText: "Email"),
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        hintText: "Email",
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue, width: 2),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty || !value.contains('@')) {
@@ -40,8 +73,14 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                     SizedBox(height: 10),
                     TextFormField(
+                      controller: _passwordController,
                       decoration: InputDecoration(
                         hintText: "Password",
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue, width: 2),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                         suffixIcon: IconButton(
                           icon: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
                           onPressed: () {
@@ -61,12 +100,16 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                     SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          // Perform login or signup action
-                        }
-                      },
-                      child: Text(isLogin ? "Login" : "Signup"),
+                      onPressed: _submitForm,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      ),
+                      child: Text(
+                        isLogin ? "Login" : "Signup",
+                        style: TextStyle(fontSize: 18),
+                      ),
                     ),
                     TextButton(
                       onPressed: () {
@@ -76,8 +119,9 @@ class _AuthScreenState extends State<AuthScreen> {
                       },
                       child: Text(
                         isLogin ? "Don't have an account? Signup" : "Already have an account? Login",
+                        style: TextStyle(color: Colors.blue),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -88,5 +132,3 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 }
-
-// Next: To-Do App with CRUD Operations
