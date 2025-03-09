@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class TodoScreen extends StatefulWidget {
@@ -11,9 +10,9 @@ class _TodoScreenState extends State<TodoScreen> {
   List<String> _tasks = [];
 
   void _addTask() {
-    if (_controller.text.isNotEmpty) {
+    if (_controller.text.trim().isNotEmpty) {
       setState(() {
-        _tasks.add(_controller.text);
+        _tasks.add(_controller.text.trim());
         _controller.clear();
       });
     }
@@ -24,21 +23,23 @@ class _TodoScreenState extends State<TodoScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Edit Task"),
+        title: const Text("Edit Task"),
         content: TextField(
           controller: _controller,
-          decoration: InputDecoration(hintText: "Enter task"),
+          decoration: const InputDecoration(hintText: "Enter task"),
         ),
         actions: [
           TextButton(
             onPressed: () {
-              setState(() {
-                _tasks[index] = _controller.text;
-                _controller.clear();
-              });
+              if (_controller.text.trim().isNotEmpty) {
+                setState(() {
+                  _tasks[index] = _controller.text.trim();
+                });
+              }
+              _controller.clear();
               Navigator.pop(context);
             },
-            child: Text("Update"),
+            child: const Text("Update"),
           ),
         ],
       ),
@@ -54,23 +55,23 @@ class _TodoScreenState extends State<TodoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("To-Do List")),
+      appBar: AppBar(title: const Text("To-Do List")),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _controller,
-                    decoration: InputDecoration(hintText: "Enter task"),
+                    decoration: const InputDecoration(hintText: "Enter task"),
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: _addTask,
-                  child: Text("Add"),
+                  child: const Text("Add"),
                 ),
               ],
             ),
@@ -85,11 +86,11 @@ class _TodoScreenState extends State<TodoScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        icon: Icon(Icons.edit, color: Colors.blue),
+                        icon: const Icon(Icons.edit, color: Colors.blue),
                         onPressed: () => _editTask(index),
                       ),
                       IconButton(
-                        icon: Icon(Icons.delete, color: Colors.red),
+                        icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () => _deleteTask(index),
                       ),
                     ],
