@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+
+
 class CalculatorScreen extends StatefulWidget {
   @override
   _CalculatorScreenState createState() => _CalculatorScreenState();
@@ -20,6 +22,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         _num1 = 0;
         _num2 = 0;
         _operation = "";
+      } else if (text == "⌫") {
+        if (_currentInput.isNotEmpty) {
+          _currentInput = _currentInput.substring(0, _currentInput.length - 1);
+          _output = _currentInput.isEmpty ? "0" : _currentInput;
+        }
       } else if (text == "+" || text == "-" || text == "×" || text == "÷") {
         if (_currentInput.isNotEmpty) {
           _num1 = double.parse(_currentInput);
@@ -42,6 +49,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           _num1 = 0;
           _num2 = 0;
           _operation = "";
+        }
+      } else if (text == ".") {
+        if (!_currentInput.contains(".")) {
+          _currentInput += text;
+          _output = _currentInput;
         }
       } else {
         _currentInput += text;
@@ -99,7 +111,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   _buildButton("2"),
                   _buildButton("3"),
                   _buildButton("=", Colors.green),
-                  _buildButton("0", Colors.white, isWide: true),
+                  _buildButton("0", Colors.white),
                   _buildButton(".", Colors.white),
                 ],
               ),
@@ -110,7 +122,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     );
   }
 
-  Widget _buildButton(String text, [Color? color, bool isWide = false]) {
+  Widget _buildButton(String text, [Color? color]) {
     return GestureDetector(
       onTap: () => _buttonPressed(text),
       child: Container(
@@ -126,7 +138,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 )
               : null,
         ),
-        width: isWide ? 160 : 70,
         height: 70,
         child: Text(
           text,
@@ -136,5 +147,3 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     );
   }
 }
-
-
