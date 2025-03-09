@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
 class ImageGalleryScreen extends StatefulWidget {
+  const ImageGalleryScreen({Key? key}) : super(key: key);
+
   @override
-  _ImageGalleryScreenState createState() => _ImageGalleryScreenState();
+  State<ImageGalleryScreen> createState() => _ImageGalleryScreenState();
 }
 
 class _ImageGalleryScreenState extends State<ImageGalleryScreen> {
@@ -32,34 +34,46 @@ class _ImageGalleryScreenState extends State<ImageGalleryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Image Gallery")),
+      appBar: AppBar(title: const Text("Image Gallery")),
       body: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 8.0,
-            mainAxisSpacing: 8.0,
-          ),
-          itemCount: _images.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () => _showFullImage(_images[index]),
-              child: Image.file(_images[index], fit: BoxFit.cover),
-            );
-          },
-        ),
+        padding: const EdgeInsets.all(8.0),
+        child: _images.isEmpty
+            ? const Center(
+                child: Text(
+                  "No images added yet!",
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              )
+            : GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                ),
+                itemCount: _images.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () => _showFullImage(_images[index]),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(_images[index], fit: BoxFit.cover),
+                    ),
+                  );
+                },
+              ),
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
-            child: Icon(Icons.camera),
+            heroTag: "camera",
+            child: const Icon(Icons.camera),
             onPressed: () => _pickImage(ImageSource.camera),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           FloatingActionButton(
-            child: Icon(Icons.photo_library),
+            heroTag: "gallery",
+            child: const Icon(Icons.photo_library),
             onPressed: () => _pickImage(ImageSource.gallery),
           ),
         ],
@@ -70,7 +84,7 @@ class _ImageGalleryScreenState extends State<ImageGalleryScreen> {
 
 class FullScreenImage extends StatelessWidget {
   final File image;
-  FullScreenImage({required this.image});
+  const FullScreenImage({Key? key, required this.image}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
