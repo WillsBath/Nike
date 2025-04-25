@@ -35,7 +35,9 @@ class _HotelSearchScreenState extends State<HotelSearchScreen> {
   }
 
   Future<void> _getCurrentLocation() async {
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
     setState(() {
       _currentPosition = position;
     });
@@ -59,14 +61,20 @@ class _HotelSearchScreenState extends State<HotelSearchScreen> {
       _markers.add(
         Marker(
           markerId: MarkerId('hotel1'),
-          position: LatLng(_currentPosition!.latitude + 0.01, _currentPosition!.longitude + 0.01),
+          position: LatLng(
+            _currentPosition!.latitude + 0.01,
+            _currentPosition!.longitude + 0.01,
+          ),
           infoWindow: InfoWindow(title: 'Hotel Paradise', snippet: '4.5 stars'),
         ),
       );
       _markers.add(
         Marker(
           markerId: MarkerId('hotel2'),
-          position: LatLng(_currentPosition!.latitude - 0.01, _currentPosition!.longitude - 0.01),
+          position: LatLng(
+            _currentPosition!.latitude - 0.01,
+            _currentPosition!.longitude - 0.01,
+          ),
           infoWindow: InfoWindow(title: 'Luxury Inn', snippet: '4.7 stars'),
         ),
       );
@@ -108,3 +116,59 @@ class _HotelSearchScreenState extends State<HotelSearchScreen> {
     );
   }
 }
+/*
+# ================================
+# 1. pubspec.yaml dependencies
+# ================================
+# Add these under dependencies:
+dependencies:
+  flutter:
+    sdk: flutter
+  google_maps_flutter: ^2.5.0       # For Google Maps
+  geolocator: ^10.1.0               # For current location
+  google_places_flutter: ^2.0.5     # For autocomplete input
+
+# Run this after saving:
+flutter pub get
+
+<!-- ===========================================
+     2. android/app/src/main/AndroidManifest.xml
+     =========================================== -->
+
+<!-- Outside <application> tag -->
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.INTERNET" />
+
+<!-- Inside <application> tag -->
+<meta-data
+    android:name="com.google.android.geo.API_KEY"
+    android:value="YOUR_GOOGLE_API_KEY_HERE" />
+// =================================
+// 3. android/app/build.gradle
+// =================================
+
+android {
+  defaultConfig {
+    applicationId "com.example.yourapp"
+    minSdkVersion 21     // Required for geolocator & maps
+    targetSdkVersion 33
+    // ...
+  }
+}
+
+# ====================================
+# 4. Google Cloud Platform (GCP) setup
+# ====================================
+
+1. Go to https://console.cloud.google.com/
+2. Create/select a project.
+3. Go to "APIs & Services" > "Credentials".
+4. Create an API Key.
+5. Copy it and paste into AndroidManifest.xml (step 2 above).
+6. Enable these APIs:
+   - Maps SDK for Android
+   - Places API
+   - Geolocation API
+
+*/ 
