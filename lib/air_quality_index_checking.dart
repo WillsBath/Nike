@@ -102,3 +102,27 @@ class _AQIScreenState extends State<AQIScreen> {
     );
   }
 }
+
+/*
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^0.14.0  # Make sure to add the latest version of the http package
+
+
+
+Go to https://waqi.info/.
+
+Sign up for a new account or log in if you already have one.
+
+Navigate to the API section (look for "Get Your API Key" or check under "Developers").
+
+Request your API key, and it will be generated for you.
+
+Copy the generated API key.
+
+Replace YOUR_API_KEY in your code with the API key (e.g., https://api.waqi.info/feed/here/?token=YOUR_ACTUAL_API_KEY).
+
+Be aware of usage limits and restrictions for the free API key (requests per day or minute).
+ */

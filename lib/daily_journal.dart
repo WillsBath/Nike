@@ -97,3 +97,11 @@ class _JournalScreenState extends State<JournalScreen> {
     );
   }
 }
+
+/*
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_preferences: ^2.0.15  # Ensure this is the latest version or match the version compatible with your Flutter version.
+
+ */

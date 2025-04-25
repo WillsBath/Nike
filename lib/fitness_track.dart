@@ -77,3 +77,10 @@ class _FitnessTrackerScreenState extends State<FitnessTrackerScreen> {
     );
   }
 }
+/*
+dependencies:
+  flutter:
+    sdk: flutter
+  fl_chart: ^0.40.0  # For charts (replace with the latest version)
+  google_fonts: ^3.0.1  # For Google Fonts (replace with the latest version)
+ */

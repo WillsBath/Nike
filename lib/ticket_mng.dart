@@ -22,7 +22,11 @@ class Ticket {
   String destination;
   DateTime journeyDate;
 
-  Ticket({required this.name, required this.destination, required this.journeyDate});
+  Ticket({
+    required this.name,
+    required this.destination,
+    required this.journeyDate,
+  });
 }
 
 class TicketListScreen extends StatefulWidget {
@@ -59,25 +63,29 @@ class _TicketListScreenState extends State<TicketListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Ticket Booking')),
-      body: tickets.isEmpty
-          ? Center(child: Text('No tickets booked'))
-          : ListView.builder(
-              itemCount: tickets.length,
-              itemBuilder: (context, index) {
-                final ticket = tickets[index];
-                return Card(
-                  child: ListTile(
-                    title: Text(ticket.name),
-                    subtitle: Text('${ticket.destination}\n${DateFormat('yyyy-MM-dd').format(ticket.journeyDate)}'),
-                    onTap: () => _addOrEditTicket(ticket: ticket, index: index),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete, color: Colors.red),
-                      onPressed: () => _deleteTicket(index),
+      body:
+          tickets.isEmpty
+              ? Center(child: Text('No tickets booked'))
+              : ListView.builder(
+                itemCount: tickets.length,
+                itemBuilder: (context, index) {
+                  final ticket = tickets[index];
+                  return Card(
+                    child: ListTile(
+                      title: Text(ticket.name),
+                      subtitle: Text(
+                        '${ticket.destination}\n${DateFormat('yyyy-MM-dd').format(ticket.journeyDate)}',
+                      ),
+                      onTap:
+                          () => _addOrEditTicket(ticket: ticket, index: index),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () => _deleteTicket(index),
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => _addOrEditTicket(),
@@ -104,7 +112,9 @@ class _TicketDialogState extends State<TicketDialog> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.ticket?.name ?? '');
-    _destinationController = TextEditingController(text: widget.ticket?.destination ?? '');
+    _destinationController = TextEditingController(
+      text: widget.ticket?.destination ?? '',
+    );
     _selectedDate = widget.ticket?.journeyDate;
   }
 
@@ -152,12 +162,15 @@ class _TicketDialogState extends State<TicketDialog> {
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(labelText: 'Passenger Name'),
-              validator: (value) => value!.isEmpty ? 'Please enter a name' : null,
+              validator:
+                  (value) => value!.isEmpty ? 'Please enter a name' : null,
             ),
             TextFormField(
               controller: _destinationController,
               decoration: InputDecoration(labelText: 'Destination'),
-              validator: (value) => value!.isEmpty ? 'Please enter a destination' : null,
+              validator:
+                  (value) =>
+                      value!.isEmpty ? 'Please enter a destination' : null,
             ),
             SizedBox(height: 10),
             Row(
@@ -191,3 +204,6 @@ class _TicketDialogState extends State<TicketDialog> {
     );
   }
 }
+/*
+ intl: ^0.18.1
+*/ 

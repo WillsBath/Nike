@@ -102,3 +102,21 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     );
   }
 }
+
+
+/*
+name: video_player_demo
+description: A new Flutter project to demonstrate video playback
+
+dependencies:
+  flutter:
+    sdk: flutter
+  video_player: ^2.5.0  # Make sure to add the correct version based on your Flutter version
+
+
+In your android/app/src/main/AndroidManifest.xml file, add the following permission 
+if you are accessing the internet for streaming videos:
+<uses-permission android:name="android.permission.INTERNET" />
+
+
+ */

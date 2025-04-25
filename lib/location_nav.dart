@@ -29,14 +29,15 @@ class _LocationScreenState extends State<LocationScreen> {
   void _openGoogleMaps() async {
     final pickup = Uri.encodeComponent(_pickupController.text);
     final destination = Uri.encodeComponent(_destinationController.text);
-    final googleMapsUrl = 'https://www.google.com/maps/dir/?api=1&origin=$pickup&destination=$destination';
+    final googleMapsUrl =
+        'https://www.google.com/maps/dir/?api=1&origin=$pickup&destination=$destination';
 
     if (await canLaunch(googleMapsUrl)) {
       await launch(googleMapsUrl);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not launch Google Maps')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Could not launch Google Maps')));
     }
   }
 
@@ -68,3 +69,7 @@ class _LocationScreenState extends State<LocationScreen> {
     );
   }
 }
+
+/*
+ url_launcher: ^6.2.1
+*/ 

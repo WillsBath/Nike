@@ -1,31 +1,6 @@
-# Real Time Weather Report Fetching System
-# Replace the  YOUR_API_KEY in the statement String apiKey = "YOUR_API_KEY";  with  a valid API key from OpenWeatherMap
-
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-void main() {
-  runApp(WeatherApp());
-}
-
-class WeatherApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.light().copyWith(
-        textTheme: TextTheme(bodyLarge: TextStyle(fontFamily: 'Montserrat')),
-      ),
-      darkTheme: ThemeData.dark().copyWith(
-        textTheme: TextTheme(bodyLarge: TextStyle(fontFamily: 'Montserrat')),
-      ),
-      themeMode: ThemeMode.system,
-      home: WeatherScreen(),
-    );
-  }
-}
 
 class WeatherScreen extends StatefulWidget {
   @override
@@ -33,25 +8,43 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
-  String location = "New York";
-  double? temperature;
-  String description = "Fetching weather...";
-  String apiKey = "YOUR_API_KEY";
+  String _city = 'London';
+  String _temperature = '';
+  String _weatherDescription = '';
+  String _feelsLike = '';
+  bool _loading = false;
 
-  Future<void> fetchWeather() async {
-    final response = await http.get(
-      Uri.parse("https://api.openweathermap.org/data/2.5/weather?q=$location&appid=$apiKey&units=metric"),
-    );
+  final String apiKey = 'bd5e378503939ddaee76f12ad7a97608';
 
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+  Future<void> _getWeather() async {
+    setState(() {
+      _loading = true;
+    });
+
+    final String url = 'https://api.openweathermap.org/data/2.5/weather?q=$_city&appid=$apiKey&units=metric';
+
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          _temperature = '${data['main']['temp']} °C';
+          _weatherDescription = data['weather'][0]['description'];
+          _feelsLike = 'Feels like: ${data['main']['feels_like']} °C';
+        });
+      } else {
+        setState(() {
+          _temperature = 'Error fetching data';
+        });
+      }
+    } catch (e) {
       setState(() {
-        temperature = data['main']['temp'];
-        description = data['weather'][0]['description'];
+        _temperature = 'Error fetching data';
       });
-    } else {
+    } finally {
       setState(() {
-        description = "Error fetching weather";
+        _loading = false;
       });
     }
   }
@@ -59,35 +52,43 @@ class _WeatherScreenState extends State<WeatherScreen> {
   @override
   void initState() {
     super.initState();
-    fetchWeather();
+    _getWeather();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Weather App")),
-      body: Center(
+      appBar: AppBar(
+        title: Text('Weather App'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              location,
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              temperature != null ? "${temperature!.toStringAsFixed(1)}°C" : "Loading...",
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              description,
-              style: TextStyle(fontSize: 20),
+          children: <Widget>[
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  _city = value;
+                });
+              },
+              decoration: InputDecoration(labelText: 'Enter city name'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: fetchWeather,
-              child: Text("Refresh"),
+              onPressed: _getWeather,
+              child: Text('Get Weather'),
+            ),
+            SizedBox(height: 20),
+            _loading
+                ? CircularProgressIndicator()
+                : Column(
+              children: [
+                Text('City: $_city'),
+                Text('Temperature: $_temperature'),
+                Text('Weather: $_weatherDescription'),
+                Text(_feelsLike),
+              ],
             ),
           ],
         ),
@@ -95,3 +96,23 @@ class _WeatherScreenState extends State<WeatherScreen> {
     );
   }
 }
+
+/*
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^0.15.0
+
+
+If you're targeting Android, add internet permission in:
+
+android/app/src/main/AndroidManifest.xml:
+
+<uses-permission android:name="android.permission.INTERNET"/>
+
+
+Go to https://openweathermap.org → Click “Sign In” → “Create an Account” → Verify your email 
+→ Log in at https://home.openweathermap.org → Go to “API keys” → Click “+ Create key” 
+→ Name it (e.g., weatherAppKey) → Click “Generate” → Copy the API key 
+→ Paste it in your code replacing YOUR_API_KEY.
+ */

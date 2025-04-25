@@ -96,3 +96,18 @@ class FullScreenImage extends StatelessWidget {
     );
   }
 }
+
+/*
+dependencies:
+  flutter:
+    sdk: flutter
+  image_picker: ^0.8.5+3 
+
+
+  For Android, open android/app/src/main/AndroidManifest.xml and add the following permissions inside the <manifest> tag
+
+  <uses-permission android:name="android.permission.CAMERA"/>
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+ */

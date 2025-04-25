@@ -102,3 +102,12 @@ class _TimeZoneConverterScreenState extends State<TimeZoneConverterScreen> {
     );
   }
 }
+
+/*
+dependencies:
+  flutter:
+    sdk: flutter
+  intl: ^0.18.0 # For formatting the time
+  timezone: ^0.8.0 # For time zone conversion
+
+ */

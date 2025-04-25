@@ -107,3 +107,11 @@ class _CalorieBurnCalculatorScreenState extends State<CalorieBurnCalculatorScree
     );
   }
 }
+
+/*
+dependencies:
+  flutter:
+    sdk: flutter
+  google_fonts: ^3.0.1  # Use the latest version available
+
+ */
