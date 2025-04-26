@@ -171,4 +171,30 @@ android {
    - Places API
    - Geolocation API
 
+
+or 
+
+Step-by-step to generate your own working key:
+Go to Google Cloud Console.
+
+Create a Project
+Click the dropdown at the top, then "New Project".
+
+Enable the API you need:
+Go to "APIs & Services" → "Library"
+Search for e.g., Maps SDK for Android, YouTube Data API v3, etc.
+Click Enable.
+
+Create API Key:
+Go to "APIs & Services" → "Credentials"
+Click "Create Credentials" → "API Key"
+Copy the generated key (looks like AIza...)
+
+(Recommended) Restrict the Key:
+Click on your key → Set Application restrictions (e.g., Android app with SHA-1 + package name).
+Set API restrictions to limit which APIs it can access.
+
+<meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyD3YourRealKeyHere"/>
+
 */ 
