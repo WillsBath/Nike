@@ -115,4 +115,18 @@ Go to https://openweathermap.org → Click “Sign In” → “Create an Accoun
 → Log in at https://home.openweathermap.org → Go to “API keys” → Click “+ Create key” 
 → Name it (e.g., weatherAppKey) → Click “Generate” → Copy the API key 
 → Paste it in your code replacing YOUR_API_KEY.
+
+
+Steps to get a free weather API key:
+Go to: https://home.openweathermap.org/users/sign_up
+
+Sign up for a free account (just needs email and password).
+
+Once logged in, go to “API Keys” tab or visit https://home.openweathermap.org/api_keys.
+
+You’ll see a default key like 123abc456def... — that’s your personal weather API key.
+
+Use that in your app or website.
+
+
  */
