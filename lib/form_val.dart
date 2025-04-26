@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(FormValidationApp());
+  runApp(FormApp());
 }
 
-class FormValidationApp extends StatelessWidget {
+class FormApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Form Validation App',
       debugShowCheckedModeBanner: false,
-      title: 'Form Validation',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -25,70 +25,109 @@ class FormValidationScreen extends StatefulWidget {
 
 class _FormValidationScreenState extends State<FormValidationScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Form submitted successfully!')),
-      );
-    }
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      filled: true,
+      fillColor: Colors.grey[200],
+      errorStyle: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Form Validation')),
+      appBar: AppBar(
+        title: Text("Form Validation"),
+        backgroundColor: Colors.blueAccent,
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
-                controller: nameController,
-                decoration: InputDecoration(labelText: 'Name'),
+                controller: _nameController,
+                decoration: _inputDecoration("Name"),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
+                    return "Name cannot be empty";
                   }
                   return null;
                 },
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 12),
               TextFormField(
-                controller: emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                controller: _emailController,
+                decoration: _inputDecoration("Email"),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  } else if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\$').hasMatch(value)) {
-                    return 'Enter a valid email address';
+                    return "Email cannot be empty";
+                  }
+                  if (!RegExp(
+                    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$',
+                  ).hasMatch(value)) {
+                    return "Enter a valid email";
                   }
                   return null;
                 },
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 12),
               TextFormField(
-                controller: phoneController,
-                decoration: InputDecoration(labelText: 'Phone Number'),
+                controller: _phoneController,
+                decoration: _inputDecoration("Phone Number"),
                 keyboardType: TextInputType.phone,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your phone number';
-                  } else if (!RegExp(r'^[0-9]{10}\$').hasMatch(value)) {
-                    return 'Enter a valid 10-digit phone number';
+                    return "Phone number cannot be empty";
+                  }
+                  if (value.length != 10 || !RegExp(r'^\d{10}$').hasMatch(value)) {
+                    return "Phone number must be exactly 10 digits";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 12),
+              TextFormField(
+                controller: _passwordController,
+                decoration: _inputDecoration("Password"),
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Password cannot be empty";
                   }
                   return null;
                 },
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _submitForm,
-                child: Text('Submit'),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  textStyle: TextStyle(fontSize: 18),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Form Submitted Successfully!"),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  }
+                },
+                child: Text("Submit"),
               ),
             ],
           ),
